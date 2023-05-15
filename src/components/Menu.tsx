@@ -8,11 +8,42 @@ import {
   IonMenu,
   IonMenuToggle,
   IonNote,
-} from '@ionic/react';
+} from "@ionic/react";
 
-import { useLocation } from 'react-router-dom';
-import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
-import './Menu.css';
+import { useHistory, useLocation } from "react-router-dom";
+import {
+  archiveOutline,
+  archiveSharp,
+  bookmarkOutline,
+  heartOutline,
+  heartSharp,
+  logOut,
+  logOutOutline,
+  mailOutline,
+  mailSharp,
+  medkit,
+  medkitOutline,
+  paperPlaneOutline,
+  paperPlaneSharp,
+  personAdd,
+  personAddOutline,
+  search,
+  searchOutline,
+  today,
+  todayOutline,
+  trashOutline,
+  trashSharp,
+  warningOutline,
+  warningSharp,
+} from "ionicons/icons";
+import "./Menu.css";
+import { useEffect, useState } from "react";
+import { Usuario } from "../interfaces";
+
+interface ContainerProps {
+  usuarioLogueado: Usuario;
+  setUsuarioLogueado: (prestador: Usuario) => void;
+}
 
 interface AppPage {
   url: string;
@@ -23,59 +54,81 @@ interface AppPage {
 
 const appPages: AppPage[] = [
   {
-    title: 'Inbox',
-    url: '/page/Inbox',
-    iosIcon: mailOutline,
-    mdIcon: mailSharp
+    title: "Agenda",
+    url: "/portal/Agenda",
+    iosIcon: todayOutline,
+    mdIcon: today,
   },
   {
-    title: 'Outbox',
-    url: '/page/Outbox',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp
+    title: "Registrar Paciente",
+    url: "/portal/Registrar",
+    iosIcon: personAddOutline,
+    mdIcon: personAdd,
   },
   {
-    title: 'Favorites',
-    url: '/page/Favorites',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp
+    title: "Buscar Paciente",
+    url: "/portal/Buscar",
+    iosIcon: searchOutline,
+    mdIcon: search,
   },
   {
-    title: 'Archived',
-    url: '/page/Archived',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp
+    title: "Dar Turno",
+    url: "/portal/DarTurno",
+    iosIcon: medkitOutline,
+    mdIcon: medkit,
   },
-  {
-    title: 'Trash',
-    url: '/page/Trash',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp
-  },
-  {
-    title: 'Spam',
-    url: '/page/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp
-  }
 ];
 
-const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+const labels = ["Family", "Friends", "Notes", "Work", "Travel", "Reminders"];
 
-const Menu: React.FC = () => {
+const Menu: React.FC<ContainerProps> = ({
+  usuarioLogueado,
+  setUsuarioLogueado,
+}) => {
   const location = useLocation();
+  const history = useHistory();
 
+  const redirigirLogin = (): void => {
+    setUsuarioLogueado({
+      usuario: "",
+      password: "",
+      token: "",
+      codigo: 0,
+      especialidadNom: "",
+      nombreCompleto: "",
+      nombreUsuario: "",
+      prestadorCod: 0,
+      prestadorNom: "",
+      rol: "",
+      prestadores: [],
+    });
+    history.push("/");
+  };
+  
   return (
-    <IonMenu contentId="main" type="overlay">
+    <IonMenu contentId="main" type="push">
       <IonContent>
         <IonList id="inbox-list">
-          <IonListHeader>Inbox</IonListHeader>
-          <IonNote>hi@ionicframework.com</IonNote>
+          <IonListHeader>{usuarioLogueado?.nombreCompleto}</IonListHeader>
+          <IonNote>{usuarioLogueado?.especialidadNom}</IonNote>
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
-                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
-                  <IonIcon aria-hidden="true" slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
+                <IonItem
+                  className={
+                    location.pathname === appPage.url ? "selected" : ""
+                  }
+                  routerLink={appPage.url}
+                  routerDirection="none"
+                  lines="none"
+                  detail={false}
+                >
+                  <IonIcon
+                    aria-hidden="true"
+                    slot="start"
+                    ios={appPage.iosIcon}
+                    md={appPage.mdIcon}
+                  />
                   <IonLabel>{appPage.title}</IonLabel>
                 </IonItem>
               </IonMenuToggle>
@@ -83,14 +136,16 @@ const Menu: React.FC = () => {
           })}
         </IonList>
 
-        <IonList id="labels-list">
-          <IonListHeader>Labels</IonListHeader>
-          {labels.map((label, index) => (
-            <IonItem lines="none" key={index}>
-              <IonIcon aria-hidden="true" slot="start" icon={bookmarkOutline} />
-              <IonLabel>{label}</IonLabel>
-            </IonItem>
-          ))}
+        <IonList>
+          <IonItem button onClick={redirigirLogin} fill="solid" lines="none">
+            <IonLabel color="danger">Cerrar Sesion</IonLabel>
+            <IonIcon
+              aria-hidden="true"
+              slot="end"
+              ios={logOutOutline}
+              md={logOut}
+            />
+          </IonItem>
         </IonList>
       </IonContent>
     </IonMenu>
