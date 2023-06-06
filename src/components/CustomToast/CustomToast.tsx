@@ -9,8 +9,10 @@ import {
 import { useEffect, useState } from "react";
 import { Notificacion } from "../../interfaces";
 import "./CustomToast.css";
+import useNotificacion from "../../hooks/notificacion";
 
 const CustomToast: React.FC<Notificacion> = ({ mostrar, mensaje, color }) => {
+  const { ocultarNotificacion } = useNotificacion();
   const getColor = (): string => {
     switch (color) {
       case "verde":
@@ -45,10 +47,14 @@ const CustomToast: React.FC<Notificacion> = ({ mostrar, mensaje, color }) => {
       position="top"
       className={getColor()}
       icon={getIcon()}
+      onDidDismiss={() => ocultarNotificacion()}
       buttons={[
         {
-          icon: getIcon(),
+          icon: closeOutline,
           role: "cancel",
+          handler: () => {
+            ocultarNotificacion();
+          },
         },
       ]}
     />

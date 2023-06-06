@@ -61,7 +61,7 @@ const appPages: AppPage[] = [
   },
   {
     title: "Registrar Paciente",
-    url: "/portal/Registrar",
+    url: "/portal/Registrar Paciente",
     iosIcon: personAddOutline,
     mdIcon: personAdd,
   },

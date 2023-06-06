@@ -9,6 +9,7 @@ type UseNotificacion = {
     mensajeMostrar: string,
     colorMostrar: string
   ) => void;
+  ocultarNotificacion: () => void;
 };
 
 const useNotificacion = (): UseNotificacion => {
@@ -25,7 +26,14 @@ const useNotificacion = (): UseNotificacion => {
     setMensaje(mensajeMostrar);
     setColor(colorMostrar);
   };
-  return { mostrar, mensaje, color, mostrarNotificacion };
+
+  const ocultarNotificacion = () => {
+    setMostrar(false);
+    setMensaje("");
+    setColor("");
+  };
+
+  return { mostrar, mensaje, color, mostrarNotificacion, ocultarNotificacion };
 };
 
 export default useNotificacion;

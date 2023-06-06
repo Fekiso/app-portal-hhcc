@@ -19,6 +19,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 import useNotificacion from "../../hooks/notificacion";
 import CustomToast from "../../components/CustomToast/CustomToast";
+import StyledButton from "../../components/StyledButton/StyledButton";
 
 interface ContainerProps {
   usuarioLogueado: Usuario;
@@ -48,8 +49,20 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
   };
 
   useEffect(() => {
+    const prestadorLogueado: Prestador = {
+      prestadorCod: usuarioLogueado.prestadorCod,
+      prestadorNom: usuarioLogueado.prestadorNom,
+      especialidadNom: usuarioLogueado.especialidadNom,
+    };
+    setPrestadorSeleccionado(prestadorLogueado);
+    setFechaSeleccionada(dayjs().format("YYYY/MM/DD"));
     listarPrestadores();
+    traerTurnosAgenda(prestadorLogueado, dayjs().format("YYYY/MM/DD"));
   }, []);
+
+  // useEffect(() => {
+  //   console.log(mostrar);
+  // }, [mostrar]);
 
   const traerTurnosAgenda = async (prestador: Prestador, fecha: string) => {
     let turnos: Turno[];
@@ -122,27 +135,88 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
       }
     });
 
-    setPrestadorSeleccionado(prestadorSeleccionado);
+    setPrestadorSeleccionado(prestadorSelect);
     traerTurnosAgenda(prestadorSelect, fechaSeleccionada);
+  };
+
+  const renderAgenda = () => {
+    const mostrarAgenda = turnos.map((turno) => {
+      return (
+        <IonItem className="fila ion-text-start" disabled={turno.paciente === 0}>
+          <IonCol className="celda">
+            <StyledButton
+              disabled
+              className={
+                turno.asistio === 0
+                  ? turno.paciente !== 0
+                    ? "gris text"
+                    : "blanco text"
+                  : turno.atendido
+                  ? "rojo"
+                  : dayjs(turno.atendidoHora).format("HH:mm") ===
+                    dayjs("0001-01-01T00:00:00").format("HH:mm")
+                  ? "azul text"
+                  : "verde text"
+              }
+            >
+              {turno.asistio === 0
+                ? turno.paciente !== 0
+                  ? "No asistio"
+                  : "No asignado"
+                : turno.atendido
+                ? "Atendido"
+                : dayjs(turno.atendidoHora).format("HH:mm") ===
+                  dayjs("0001-01-01T00:00:00").format("HH:mm")
+                ? "Asistio"
+                : "Siendo atendido"}
+            </StyledButton>
+          </IonCol>
+          <IonCol className="celda">
+            <p>{dayjs(turno.hora).format("HH:mm")}</p>
+          </IonCol>
+          <IonCol className="celda">
+            <p>{turno.pacienteNom ?? ""}</p>
+          </IonCol>
+          <IonCol className="celda">
+            <p>
+              {(turno.mutual === 0 ? "" : turno.mutual) +
+                " - " +
+                (turno.mutualNom === null ? "" : turno.mutualNom)}
+            </p>
+          </IonCol>
+          <IonCol className="celda">
+            <p>{turno.observaciones ?? ""}</p>
+          </IonCol>
+        </IonItem>
+      );
+    });
+    return mostrarAgenda;
   };
 
   return (
     <IonGrid>
       <IonCard>
         <IonRow>
-          <IonCol>
+          <IonCol sizeXs="12" sizeMd="6">
             <IonItem lines="none">
+              <IonInput
+                readonly
+                label="Prestador"
+                label-placement="floating"
+                // onKeyUp={(e) => documentoNro(e.target.value)}
+                value={prestadorSeleccionado.prestadorNom}
+              />
               <CustomDesplegable
                 array={prestadoresDesplegables}
                 handleChange={handleChangePrestadorSelect}
                 id="Prestadores"
                 mostrarSearch={true}
                 mostrarTodos={false}
-                value={-1}
+                value={prestadorSeleccionado.prestadorCod}
               />
             </IonItem>
           </IonCol>
-          <IonCol>
+          <IonCol sizeXs="12" sizeMd="6">
             <IonItem lines="none">
               <IonIcon
                 icon={chevronBackOutline}
@@ -191,51 +265,12 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
                   <p>Observacion</p>
                 </IonCol>
               </IonItem>
-              {turnos.map((turno) => (
-                <IonItem className="fila ion-text-start">
-                  <IonCol className="celda">
-                    {/* <StyledButton
-                      disabled
-                      className={
-                        turno.asistio === 0
-                          ? "gris"
-                          : turno.atendido
-                          ? "rojo"
-                          : dayjs(turno.atendidoHora).format("HH:mm") ===
-                            dayjs("0001-01-01T00:00:00").format("HH:mm")
-                          ? "azul"
-                          : "verde"
-                      }
-                    >
-                      {turno.asistio === 0
-                        ? "No asistio"
-                        : turno.atendido
-                        ? "Atendido"
-                        : dayjs(turno.atendidoHora).format("HH:mm") ===
-                          dayjs("0001-01-01T00:00:00").format("HH:mm")
-                        ? "Asistio"
-                        : "Siendo atendido"}
-                    </StyledButton> */}
-                  </IonCol>
-                  <IonCol className="celda">
-                    <p>{dayjs(turno.hora).format("HH:mm")}</p>
-                  </IonCol>
-                  <IonCol className="celda">
-                    <p>{turno.pacienteNom}</p>
-                  </IonCol>
-                  <IonCol className="celda">
-                    <p>{turno.mutual + " - " + turno.mutualNom}</p>
-                  </IonCol>
-                  <IonCol className="celda">
-                    <p>{turno.observaciones}</p>
-                  </IonCol>
-                </IonItem>
-              ))}
+              <>{renderAgenda()}</>
             </IonGrid>
           </IonList>
         </IonCard>
       )}
-      {mostrar && <CustomToast mostrar={mostrar} mensaje={mensaje} color={color} />}
+      <CustomToast mostrar={mostrar} mensaje={mensaje} color={color} />
     </IonGrid>
   );
 };

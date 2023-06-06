@@ -28,6 +28,7 @@ import { useState } from "react";
 import { Usuario } from "./interfaces";
 import { Notificacion } from "./interfaces";
 import CustomToast from "./components/CustomToast/CustomToast";
+import BuscadorPacientes from "./components/BuscadorPacientes/BuscadorPacientes";
 
 setupIonicReact();
 
@@ -35,7 +36,7 @@ const App: React.FC = () => {
   const [usuario, setUsuario] = useState<Usuario>();
   return (
     <IonApp>
-      <IonReactRouter>
+      {/* <IonReactRouter>
         <Route path="/" exact={true}>
           <Redirect to="/Login" />
         </Route>
@@ -57,7 +58,8 @@ const App: React.FC = () => {
             </Route>
           </>
         )}
-      </IonReactRouter>
+      </IonReactRouter> */}
+      <BuscadorPacientes />
     </IonApp>
   );
 };

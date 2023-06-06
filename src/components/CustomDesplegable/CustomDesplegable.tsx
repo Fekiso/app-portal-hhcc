@@ -8,13 +8,15 @@ import {
   IonLabel,
   IonList,
   IonModal,
+  IonPopover,
   IonSearchbar,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { radioButtonOffOutline, radioButtonOnOutline } from "ionicons/icons";
+import { radioButtonOffOutline, radioButtonOnOutline, search, searchOutline } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { DesplegableModel } from "../../interfaces";
+import StyledButton from "../StyledButton/StyledButton";
 // import StyledButton from "../StyledButton/StyledButton";
 
 interface ContainerProps {
@@ -33,18 +35,15 @@ const CustomDesplegable: React.FC<ContainerProps> = ({
   value,
   handleChange,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [texto, setTexto] = useState("");
   const [searchText, setSearchText] = useState("");
-  const [options, setOptions] = useState(false);
-  const [opcionesValidas, setOpcionesValidas] = useState<DesplegableModel[]>(
-    []
-  );
+  const [opcionesValidas, setOpcionesValidas] = useState<DesplegableModel[]>([]);
 
   const onHandleChange = (value: number, textLabel: string) => {
     handleChange(value, id);
     setTexto(textLabel);
-    setIsOpen(false);
+    setOpen(false);
   };
 
   const FiltrarOpciones = (ev: any) => {
@@ -57,28 +56,23 @@ const CustomDesplegable: React.FC<ContainerProps> = ({
   };
 
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
       setOpcionesValidas(array);
     }
     if (texto === "" || (value === -1 && !mostrarTodos)) {
       // setTexto("Seleccione una opcion");
     }
-  }, [isOpen]);
+  }, [open]);
 
   return (
     <>
-      <IonLabel position={"floating"}>{id}: </IonLabel>
-      <IonInput onFocus={() => setIsOpen(true)} value={texto} />
-
-      <IonModal isOpen={isOpen} onWillDismiss={() => setIsOpen(false)}>
+      <IonButton onClick={() => setOpen(true)} slot="end" fill="clear">
+        <IonIcon aria-hidden="true" ios={searchOutline} md={search} size="large" />
+      </IonButton>
+      <IonModal isOpen={open} onDidDismiss={() => setOpen(false)}>
         <IonHeader>
           <IonToolbar>
-            <IonButton
-              slot="end"
-              fill="clear"
-              expand="full"
-              onClick={() => setIsOpen(false)}
-            >
+            <IonButton slot="end" fill="clear" expand="full" onClick={() => setOpen(false)}>
               Cancelar
             </IonButton>
             <IonTitle>{id}</IonTitle>
@@ -95,17 +89,11 @@ const CustomDesplegable: React.FC<ContainerProps> = ({
           )}
           <IonList>
             {mostrarTodos && (
-              <IonItem
-                key={-1}
-                button
-                onClick={() => onHandleChange(-1, "Mostrar todos")}
-              >
+              <IonItem key={-1} button onClick={() => onHandleChange(-1, "Mostrar todos")}>
                 <IonLabel>Mostrar todos</IonLabel>
                 <IonIcon
                   slot="start"
-                  icon={
-                    -1 !== value ? radioButtonOffOutline : radioButtonOnOutline
-                  }
+                  icon={-1 !== value ? radioButtonOffOutline : radioButtonOnOutline}
                   size="large"
                 />
               </IonItem>
@@ -122,11 +110,7 @@ const CustomDesplegable: React.FC<ContainerProps> = ({
                 </IonLabel>
                 <IonIcon
                   slot="start"
-                  icon={
-                    item.codigo !== value
-                      ? radioButtonOffOutline
-                      : radioButtonOnOutline
-                  }
+                  icon={item.codigo !== value ? radioButtonOffOutline : radioButtonOnOutline}
                   size="large"
                 />
               </IonItem>

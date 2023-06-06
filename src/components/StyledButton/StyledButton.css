@@ -1,0 +1,55 @@
+ion-button {
+  /* --margin-top: 10px; */
+  --border-radius: 5px;
+  /* font-weight: bold; */
+}
+
+ion-button.text {
+  --border-radius: 0px;
+  --border-style: none;
+  --box-shadow: none;
+}
+
+ion-button.azul {
+  --color: var(--ion-color-primary-contrast);
+  --background: var(--ion-color-primary-tint);
+  --background-hover: var(--ion-color-primary);
+  --background-focused: var(--ion-color-primary-shade);
+}
+
+ion-button.rojo {
+  --color: var(--ion-color-danger-contrast);
+  --background: var(--ion-color-danger-tint);
+  --background-hover: var(--ion-color-danger);
+  --background-focused: var(--ion-color-danger-shade);
+}
+
+ion-button.verde {
+  --color: var(--ion-color-success-contrast);
+  --background: var(--ion-color-success-tint);
+  --background-hover: var(--ion-color-success);
+  --background-focused: var(--ion-color-success-shade);
+}
+
+ion-button.amarillo {
+  --color: var(--ion-color-warning-contrast);
+  --background: var(--ion-color-warning-tint);
+  --background-hover: var(--ion-color-warning);
+  --background-focused: var(--ion-color-warning-shade);
+}
+
+ion-button.blanco {
+  --color: var(--ion-color-light-contrast);
+  --background: var(--ion-color-light-tint);
+  --background-hover: var(--ion-color-light);
+  --background-focused: var(--ion-color-light-shade);
+}
+
+ion-button.violeta {
+  --color: #ffffff;
+  --padding-start: 40px;
+  --padding-end: 40px;
+  --background: #aca8e6;
+  --background-hover: #8986b8;
+  --background-focused: #9995cd;
+}

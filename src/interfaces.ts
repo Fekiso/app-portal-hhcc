@@ -5,9 +5,56 @@ export interface Prestador {
   prestadorNom: string;
 }
 
+export interface Paciente {
+  codigo: number;
+  hc: number;
+  documentoNro: number;
+  documentoTipo: number;
+  documentoTipoNombre: string;
+  nombre: string;
+  apellido: string;
+  mutual: number;
+  mutualNombre: string;
+  telefono: string;
+  celular: string;
+  email: string;
+  sexo: string;
+  mutualAfiliado: string;
+  nacimiento: string;
+  password: string;
+}
+export interface ErroresPaciente {
+  hc: boolean;
+  documentoNro: boolean;
+  documentoTipo: boolean;
+  documentoTipoNombre: boolean;
+  nombre: boolean;
+  apellido: boolean;
+  mutual: boolean;
+  mutualNombre: boolean;
+  telefono: boolean;
+  celular: boolean;
+  email: boolean;
+  sexo: boolean;
+  mutualAfiliado: boolean;
+  nacimiento: boolean;
+}
+
 export interface Especialidades {
   codigo: number;
   nombre: string;
+}
+
+export interface Mutual {
+  codigo: number;
+  nombre: string;
+  hojaRuta: string;
+}
+
+export interface TipoDocumento {
+  codigo: number;
+  nombre: string;
+  reducido: string;
 }
 
 export interface Usuario {

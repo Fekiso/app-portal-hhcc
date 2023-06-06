@@ -55,11 +55,7 @@ const LoginIonic: React.FC<ContainerProps> = ({ setUsuarioLogueado }) => {
   const [msjErrorPassword, setMsjErrorPassword] = useState("");
   const [registrarPaciente, setRegistrarPaciente] = useState(false);
   const [toast, setToast] = useState({ open: false, mensaje: "", tipo: "" });
-  const mostrarNotificacion = (
-    abrir: boolean,
-    mensaje: string,
-    tipo: string
-  ) => {
+  const mostrarNotificacion = (abrir: boolean, mensaje: string, tipo: string) => {
     if (abrir) {
       setToast({ open: true, mensaje: mensaje, tipo: tipo });
     } else {
@@ -101,10 +97,7 @@ const LoginIonic: React.FC<ContainerProps> = ({ setUsuarioLogueado }) => {
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
-      const response = await axios.get(
-        `${urlAxio}Usuarios?usuario=${documento}`,
-        config
-      );
+      const response = await axios.get(`${urlAxio}Usuarios?usuario=${documento}`, config);
       const data = response.data[0];
       prestador = {
         usuario: usuario.usuario,
@@ -190,8 +183,8 @@ const LoginIonic: React.FC<ContainerProps> = ({ setUsuarioLogueado }) => {
             <IonCardContent>
               <IonList>
                 <IonItem lines="none" fill="solid">
-                  <IonLabel position="floating">Nro de documento</IonLabel>
-                  <IonIcon
+                  <IonLabel position="floating">Usuario</IonLabel>
+                  {/*<IonIcon
                     aria-hidden="true"
                     slot="start"
                     ios={helpOutline}
@@ -206,27 +199,18 @@ const LoginIonic: React.FC<ContainerProps> = ({ setUsuarioLogueado }) => {
                     <IonContent class="ion-padding">
                       Solo se aceptan valores numericos
                     </IonContent>
-                  </IonPopover>
+                  </IonPopover> */}
                   <IonInput
                     value={usuario.usuario}
                     onKeyUp={handleChangeUsuario}
                     autofocus
                     inputMode="numeric"
                   />
-                  <IonIcon
-                    aria-hidden="true"
-                    slot="end"
-                    ios={personOutline}
-                    md={person}
-                  />
+                  <IonIcon aria-hidden="true" slot="end" ios={personOutline} md={person} />
                 </IonItem>
-                <IonItem
-                  lines="none"
-                  fill="solid"
-                  className={`${errorPassword && "ion-invalid"}`}
-                >
+                <IonItem lines="none" fill="solid" className={`${errorPassword && "ion-invalid"}`}>
                   <IonLabel position="floating">Contraseña</IonLabel>
-                  <IonIcon
+                  {/* <IonIcon
                     aria-hidden="true"
                     slot="start"
                     ios={helpOutline}
@@ -236,10 +220,9 @@ const LoginIonic: React.FC<ContainerProps> = ({ setUsuarioLogueado }) => {
                   />
                   <IonPopover trigger="btnHelpPassword" triggerAction="click">
                     <IonContent class="ion-padding">
-                      Si es su primera vez ingresando, ingrese su numero de
-                      documento
+                      
                     </IonContent>
-                  </IonPopover>
+                  </IonPopover> */}
                   <IonInput
                     value={usuario.password}
                     onKeyUp={handleChangePassword}
@@ -265,15 +248,15 @@ const LoginIonic: React.FC<ContainerProps> = ({ setUsuarioLogueado }) => {
               >
                 Ingresar
               </StyledButton>
-              <StyledButton
+              {/*<StyledButton
                 // @ts-ignore
                 lines="none"
                 fill="clear"
                 className="justify-content-center"
                 onClick={(e) => setRegistrarPaciente(true)}
               >
-                {/* <h5>¿No es paciente?, REGISTRESE</h5> */}
-              </StyledButton>
+                <h5>¿No es paciente?, REGISTRESE</h5> 
+              </StyledButton>*/}
             </IonCardContent>
           </IonCard>
         </IonCol>
