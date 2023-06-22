@@ -39,6 +39,7 @@ import {
 import "./Menu.css";
 import { useEffect, useState } from "react";
 import { Usuario } from "../interfaces";
+import useUsuario from "../hooks/usuarios";
 
 interface ContainerProps {
   usuarioLogueado: Usuario;
@@ -81,12 +82,35 @@ const appPages: AppPage[] = [
 
 const labels = ["Family", "Friends", "Notes", "Work", "Travel", "Reminders"];
 
-const Menu: React.FC<ContainerProps> = ({
-  usuarioLogueado,
-  setUsuarioLogueado,
-}) => {
+const Menu: React.FC<ContainerProps> = ({ usuarioLogueado, setUsuarioLogueado }) => {
+  const [usuario, setUsuario] = useState<Usuario>({
+    usuario: "",
+    password: "",
+    token: "",
+    codigo: 0,
+    especialidadNom: "",
+    nombreCompleto: "",
+    nombreUsuario: "",
+    prestadorCod: 0,
+    prestadorNom: "",
+    prestadores: [],
+    rol: "",
+  });
   const location = useLocation();
   const history = useHistory();
+  const { recuperarSesion } = useUsuario();
+
+  useEffect(() => {
+    console.log(history.location);
+    if (usuarioLogueado) {
+      setUsuario(usuarioLogueado);
+    } else {
+      if (recuperarSesion().codigo !== 0) {
+        setUsuario(recuperarSesion());
+        setUsuarioLogueado(recuperarSesion());
+      } else history.push("/ErrorPage");
+    }
+  }, []);
 
   const redirigirLogin = (): void => {
     setUsuarioLogueado({
@@ -104,20 +128,18 @@ const Menu: React.FC<ContainerProps> = ({
     });
     history.push("/");
   };
-  
+
   return (
     <IonMenu contentId="main" type="push">
       <IonContent>
         <IonList id="inbox-list">
-          <IonListHeader>{usuarioLogueado?.nombreCompleto}</IonListHeader>
-          <IonNote>{usuarioLogueado?.especialidadNom}</IonNote>
+          <IonListHeader>{usuario?.nombreCompleto}</IonListHeader>
+          <IonNote>{usuario?.especialidadNom}</IonNote>
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem
-                  className={
-                    location.pathname === appPage.url ? "selected" : ""
-                  }
+                  className={location.pathname === appPage.url ? "selected" : ""}
                   routerLink={appPage.url}
                   routerDirection="none"
                   lines="none"
@@ -139,12 +161,7 @@ const Menu: React.FC<ContainerProps> = ({
         <IonList>
           <IonItem button onClick={redirigirLogin} fill="solid" lines="none">
             <IonLabel color="danger">Cerrar Sesion</IonLabel>
-            <IonIcon
-              aria-hidden="true"
-              slot="end"
-              ios={logOutOutline}
-              md={logOut}
-            />
+            <IonIcon aria-hidden="true" slot="end" ios={logOutOutline} md={logOut} />
           </IonItem>
         </IonList>
       </IonContent>

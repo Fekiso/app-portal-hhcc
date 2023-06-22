@@ -23,6 +23,7 @@ export interface Paciente {
   nacimiento: string;
   password: string;
 }
+
 export interface ErroresPaciente {
   hc: boolean;
   documentoNro: boolean;
@@ -38,6 +39,39 @@ export interface ErroresPaciente {
   sexo: boolean;
   mutualAfiliado: boolean;
   nacimiento: boolean;
+}
+
+export interface Evolucion {
+  codigo: number;
+  fecha: string;
+  prestadorCod: number;
+  prestadorNom: string;
+  pacienteCod: number;
+  motivoConsulta: string;
+  motivo: string;
+  diagnosticoCod: number;
+  diagnosticoNom: string;
+  derivanteMat: string;
+  derivanteNom: string;
+}
+
+export interface EstudioLaboratorio {
+  codigo: number;
+  fecha: string;
+  prestadorCod: number;
+  prestadorNom: string;
+  pacienteCod: number;
+  nombreArchivo: string;
+}
+
+export interface EstudioPaciente {
+  codigo: number;
+  fecha: string;
+  prestadorCod: number;
+  prestadorNom: string;
+  pacienteCod: number;
+  documento: string;
+  estudioPacienteDocumento_Codigo: number;
 }
 
 export interface Especialidades {

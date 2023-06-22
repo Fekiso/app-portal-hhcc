@@ -8,16 +8,33 @@ import {
   IonPage,
   IonTitle,
 } from "@ionic/react";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import ExploreContainer from "../components/ExploreContainer";
 import { Usuario } from "../interfaces";
 import "./Page.css";
+import { useEffect, useState } from "react";
+import useUsuario from "../hooks/usuarios";
 
 interface ContainerProps {
   usuarioLogueado: Usuario;
+  setUsuarioLogueado: (usuario: Usuario) => void;
 }
-const Page: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
+const Page: React.FC<ContainerProps> = ({ usuarioLogueado, setUsuarioLogueado }) => {
   const { name } = useParams<{ name: string }>();
+  const [usuario, setUsuario] = useState<Usuario>();
+  const { recuperarSesion } = useUsuario();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (usuarioLogueado) {
+      setUsuario(usuarioLogueado);
+    } else {
+      if (recuperarSesion().codigo !== 0) {
+        setUsuario(recuperarSesion());
+        setUsuarioLogueado(recuperarSesion());
+      } else history.push("/ErrorPage");
+    }
+  }, []);
 
   return (
     <IonPage>
@@ -37,7 +54,7 @@ const Page: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
             <IonTitle size="large">{name}</IonTitle>
           </IonCard>
         </IonHeader>
-        {usuarioLogueado && <ExploreContainer name={name} usuarioLogueado={usuarioLogueado!} />}
+        {usuario && <ExploreContainer usuarioLogueado={usuario!} />}
       </IonContent>
     </IonPage>
   );

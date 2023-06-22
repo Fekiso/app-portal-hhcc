@@ -1,6 +1,6 @@
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import Menu from "./components/Menu";
 import Page from "./pages/Page";
 
@@ -25,41 +25,45 @@ import "./theme/variables.css";
 import LoginIonic from "./pages/Login/Login";
 import { createHashHistory } from "history";
 import { useState } from "react";
-import { Usuario } from "./interfaces";
+import { Paciente, Usuario } from "./interfaces";
 import { Notificacion } from "./interfaces";
 import CustomToast from "./components/CustomToast/CustomToast";
 import BuscadorPacientes from "./components/BuscadorPacientes/BuscadorPacientes";
+import PageError from "./pages/PageError/PageError";
+import FichaPaciente from "./components/FichaPaciente/FichaPaciente";
 
 setupIonicReact();
 
 const App: React.FC = () => {
   const [usuario, setUsuario] = useState<Usuario>();
+  const [paciente, setPaciente] = useState<Paciente>();
   return (
     <IonApp>
       {/* <IonReactRouter>
-        <Route path="/" exact={true}>
-          <Redirect to="/Login" />
-        </Route>
-        <Route path="/Login" exact={true}>
-          <LoginIonic setUsuarioLogueado={setUsuario} />
-        </Route>
-        {usuario && (
-          <>
-            <Route path="/portal/" exact={true}>
-              <Redirect to="/portal/Agenda" />
-            </Route>
-            <Route path="/portal/:name" exact={true}>
-              <IonSplitPane contentId="main">
-                <Menu usuarioLogueado={usuario!} setUsuarioLogueado={setUsuario} />
-                <IonRouterOutlet id="main">
-                  <Page usuarioLogueado={usuario!} />
-                </IonRouterOutlet>
-              </IonSplitPane>
-            </Route>
-          </>
-        )}
+        <Switch>
+          <Route path="/" exact={true}>
+            <Redirect to="/Login" />
+          </Route>
+          <Route path="/Login" exact={true}>
+            <LoginIonic setUsuarioLogueado={setUsuario} />
+          </Route>
+          <Route path="/portal/" exact={true}>
+            <Redirect to="/portal/Agenda" />
+          </Route>
+          <Route path="/portal/:name" exact={true}>
+            <IonSplitPane contentId="main">
+              <Menu usuarioLogueado={usuario!} setUsuarioLogueado={setUsuario} />
+              <IonRouterOutlet id="main">
+                <Page usuarioLogueado={usuario!} setUsuarioLogueado={setUsuario} />
+              </IonRouterOutlet>
+            </IonSplitPane>
+          </Route>
+          <Route path="/*">
+            <PageError />
+          </Route>
+        </Switch>
       </IonReactRouter> */}
-      <BuscadorPacientes />
+      <FichaPaciente setPacienteProp={setPaciente} />
     </IonApp>
   );
 };

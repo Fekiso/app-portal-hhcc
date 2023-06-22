@@ -12,7 +12,7 @@ import {
   IonRow,
 } from "@ionic/react";
 import { chevronBackOutline, chevronForwardOutline } from "ionicons/icons";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomDesplegable from "../../components/CustomDesplegable/CustomDesplegable";
 import { DesplegableModel, Prestador, Turno, Usuario } from "../../interfaces";
 import dayjs from "dayjs";
@@ -20,6 +20,9 @@ import axios from "axios";
 import useNotificacion from "../../hooks/notificacion";
 import CustomToast from "../../components/CustomToast/CustomToast";
 import StyledButton from "../../components/StyledButton/StyledButton";
+import useUsuario from "../../hooks/usuarios";
+import UseUrlAxio from "../../hooks/urlAxio";
+import { useHistory } from "react-router";
 
 interface ContainerProps {
   usuarioLogueado: Usuario;
@@ -35,6 +38,10 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
   const [fechaSeleccionada, setFechaSeleccionada] = useState<string>(dayjs().toString());
   const [turnos, setTurnos] = useState<Turno[]>([]);
   const { mostrar, mensaje, color, mostrarNotificacion } = useNotificacion();
+  const { recuperarSesion } = useUsuario();
+  const { getUrlAxio } = UseUrlAxio();
+
+  const history = useHistory();
 
   const listarPrestadores = () => {
     let listado: DesplegableModel[] = [];
@@ -49,24 +56,21 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
   };
 
   useEffect(() => {
-    const prestadorLogueado: Prestador = {
-      prestadorCod: usuarioLogueado.prestadorCod,
-      prestadorNom: usuarioLogueado.prestadorNom,
-      especialidadNom: usuarioLogueado.especialidadNom,
-    };
-    setPrestadorSeleccionado(prestadorLogueado);
-    setFechaSeleccionada(dayjs().format("YYYY/MM/DD"));
-    listarPrestadores();
-    traerTurnosAgenda(prestadorLogueado, dayjs().format("YYYY/MM/DD"));
+    if (usuarioLogueado) {
+      const prestadorLogueado: Prestador = {
+        prestadorCod: usuarioLogueado.prestadorCod,
+        prestadorNom: usuarioLogueado.prestadorNom,
+        especialidadNom: usuarioLogueado.especialidadNom,
+      };
+      setPrestadorSeleccionado(prestadorLogueado);
+      setFechaSeleccionada(dayjs().format("YYYY/MM/DD"));
+      listarPrestadores();
+      traerTurnosAgenda(prestadorLogueado, dayjs().format("YYYY/MM/DD"));
+    } else history.push("/ErrorPage");
   }, []);
-
-  // useEffect(() => {
-  //   console.log(mostrar);
-  // }, [mostrar]);
 
   const traerTurnosAgenda = async (prestador: Prestador, fecha: string) => {
     let turnos: Turno[];
-    const urlAxios = localStorage.getItem("urlAxio");
     const config = {
       headers: { Authorization: `Bearer ${usuarioLogueado.token}` },
     };
@@ -74,7 +78,7 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
     try {
       if (prestadorSeleccionado !== null) {
         const response = await axios.get(
-          `${urlAxios}Turnos/TurnosPrestador/?prestador=${prestador.prestadorCod}&fecha=${dayjs(
+          `${getUrlAxio()}Turnos/TurnosPrestador/?prestador=${prestador.prestadorCod}&fecha=${dayjs(
             fecha
           ).format("YYYY/MM/DD")}`,
           config

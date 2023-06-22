@@ -30,11 +30,11 @@ import {
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import { Usuario } from "../../interfaces";
-//   import StyledButton from "../../components/StyledButton/StyledButton";
-//   import NuevoPaciente from "../NuevoPaciente/NuevoPaciente";
 import "./Login.css";
-//   import CustomToast from "../../components/CustomToast/CustomToast";
-//   import LoadingBackdrop from "../../components/LoadingBackdrop/LoadingBackdrop";
+import useUsuario from "../../hooks/usuarios";
+import UseUrlAxio from "../../hooks/urlAxio";
+import useNotificacion from "../../hooks/notificacion";
+import CustomToast from "../../components/CustomToast/CustomToast";
 
 interface ContainerProps {
   setUsuarioLogueado: (prestador: Usuario) => void;
@@ -48,20 +48,15 @@ const LoginIonic: React.FC<ContainerProps> = ({ setUsuarioLogueado }) => {
     password: "",
     token: "",
   });
-  const [urlAxio, setUrlAxio] = useState("");
   const [tituloPagina, setTituloPagina] = useState("");
   const [errorUsuario, setErrorUsuario] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const [msjErrorPassword, setMsjErrorPassword] = useState("");
   const [registrarPaciente, setRegistrarPaciente] = useState(false);
+  const { guardarSesionUsuario } = useUsuario();
   const [toast, setToast] = useState({ open: false, mensaje: "", tipo: "" });
-  const mostrarNotificacion = (abrir: boolean, mensaje: string, tipo: string) => {
-    if (abrir) {
-      setToast({ open: true, mensaje: mensaje, tipo: tipo });
-    } else {
-      setToast({ open: false, mensaje: "", tipo: "" });
-    }
-  };
+  const { mostrar, mensaje, color, mostrarNotificacion } = useNotificacion();
+  const { getUrlAxio } = UseUrlAxio();
 
   const history = useHistory();
 
@@ -70,16 +65,14 @@ const LoginIonic: React.FC<ContainerProps> = ({ setUsuarioLogueado }) => {
   };
 
   useEffect(() => {
-    setUrlAxio(localStorage.getItem("urlAxio") || "");
     setTituloPagina(localStorage.getItem("nombreClinica") || "");
-
     document.title = localStorage.getItem("tituloWeb") || "";
     sessionStorage.setItem("hcUL", JSON.stringify({}) || "");
   }, []);
 
   const loginPaciente = async (usuario: string, password: string) => {
     try {
-      const response = await axios.post(`${urlAxio}Usuarios/Login`, {
+      const response = await axios.post(`${getUrlAxio()}Usuarios/Login`, {
         nombreUsuario: usuario,
         password: password,
       });
@@ -97,7 +90,7 @@ const LoginIonic: React.FC<ContainerProps> = ({ setUsuarioLogueado }) => {
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
-      const response = await axios.get(`${urlAxio}Usuarios?usuario=${documento}`, config);
+      const response = await axios.get(`${getUrlAxio()}Usuarios?usuario=${documento}`, config);
       const data = response.data[0];
       prestador = {
         usuario: usuario.usuario,
@@ -131,6 +124,7 @@ const LoginIonic: React.FC<ContainerProps> = ({ setUsuarioLogueado }) => {
       if (prestador) {
         mostrarNotificacion(true, "Sesión iniciada correctamente", "verde");
         setUsuarioLogueado(prestador);
+        guardarSesionUsuario(prestador);
         history.push("/portal/");
       }
     } else {
@@ -268,14 +262,9 @@ const LoginIonic: React.FC<ContainerProps> = ({ setUsuarioLogueado }) => {
           closeModal={handleCloseModalRegistrarPaciente}
         /> */}
 
-      {/* <CustomToast
-          openToast={toast.open}
-          onDidDismiss={(e) => mostrarNotificacion(false, "", "")}
-          message={toast.mensaje}
-          colorNotificacion={toast.tipo}
-        />
-  
-        {cargando && <LoadingBackdrop visualizar={cargando} />} */}
+      <CustomToast mostrar={mostrar} mensaje={mensaje} color={color} />
+
+      {/*{cargando && <LoadingBackdrop visualizar={cargando} />} */}
     </IonGrid>
   );
 };

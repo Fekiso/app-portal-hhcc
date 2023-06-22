@@ -32,6 +32,9 @@ import {
   Usuario,
 } from "../../interfaces";
 import CustomToast from "../../components/CustomToast/CustomToast";
+import useUrlAxio from "../../hooks/urlAxio";
+import UseUrlAxio from "../../hooks/urlAxio";
+import { useHistory } from "react-router";
 
 interface ContainerProps {
   usuarioLogueado: Usuario;
@@ -80,9 +83,10 @@ const RegistrarPaciente: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
   const [tiposDocSelect, setTiposDocSelect] = useState<DesplegableModel[]>([]);
   const [abrirCancelarRegistro, setAbrirCancelarRegistro] = useState<boolean>(false);
   const { mostrar, mensaje, color, mostrarNotificacion } = useNotificacion();
+  const { getUrlAxio } = UseUrlAxio();
+  const history = useHistory();
 
   const CargarTiposDocs = async () => {
-    const urlAxios = localStorage.getItem("urlAxio");
     const config = {
       headers: {
         Authorization: `Bearer ${usuarioLogueado.token}`,
@@ -90,7 +94,7 @@ const RegistrarPaciente: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
     };
 
     try {
-      const response = await axios.get(`${urlAxios}Pacientes/DocumentoTipoTraer`, config);
+      const response = await axios.get(`${getUrlAxio()}Pacientes/DocumentoTipoTraer`, config);
       let listado: DesplegableModel[] = [];
       for (let i = 0; i < response.data.length; i++) {
         listado.push({
@@ -110,7 +114,6 @@ const RegistrarPaciente: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
   };
 
   const CargarMutuales = async () => {
-    const urlAxios = localStorage.getItem("urlAxio");
     const config = {
       headers: {
         Authorization: `Bearer ${usuarioLogueado.token}`,
@@ -118,7 +121,7 @@ const RegistrarPaciente: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
     };
 
     try {
-      const response = await axios.get(`${urlAxios}Mutuales`, config);
+      const response = await axios.get(`${getUrlAxio()}Mutuales`, config);
       let listado: DesplegableModel[] = [];
       for (let i = 0; i < response.data.length; i++) {
         listado.push({
@@ -136,8 +139,10 @@ const RegistrarPaciente: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
   };
 
   useEffect(() => {
-    CargarMutuales();
-    CargarTiposDocs();
+    if (usuarioLogueado) {
+      CargarMutuales();
+      CargarTiposDocs();
+    } else history.push("/ErrorPage");
   }, []);
 
   useEffect(() => {
@@ -308,7 +313,6 @@ const RegistrarPaciente: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
     });
   };
   const RegistrarPaciente = async () => {
-    const urlAxios = localStorage.getItem("urlAxio");
     var config = {
       headers: { Authorization: `Bearer ${usuarioLogueado.token}` },
     };
@@ -317,7 +321,7 @@ const RegistrarPaciente: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
     try {
       if (validarFormRegistroPaciente()) {
         const response = await axios.post(
-          `${urlAxios}pacientes`,
+          `${getUrlAxio()}pacientes`,
           {
             hc: paciente.documentoNro,
             documentoNro: paciente.documentoNro,
