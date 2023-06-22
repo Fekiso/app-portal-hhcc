@@ -94,10 +94,10 @@ const TabsEstudios: React.FC = () => {
 
           Use the component prop when your component depends on the RouterComponentProps passed in automatically.
         */}
-          <Route path="/home" render={() => <p>home</p>} exact={true} />
-          <Route path="/radio" render={() => <p>radio</p>} exact={true} />
-          <Route path="/library" render={() => <p>library</p>} exact={true} />
-          <Route path="/search" render={() => <p>search</p>} exact={true} />
+          <Route path="/home" render={() => <small>home</small>} exact={true} />
+          <Route path="/radio" render={() => <small>radio</small>} exact={true} />
+          <Route path="/library" render={() => <small>library</small>} exact={true} />
+          <Route path="/search" render={() => <small>search</small>} exact={true} />
         </IonRouterOutlet>
       </IonTabs>
     </IonReactRouter>

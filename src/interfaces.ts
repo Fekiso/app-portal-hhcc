@@ -55,6 +55,11 @@ export interface Evolucion {
   derivanteNom: string;
 }
 
+export interface Diagnostico {
+  codigo: number;
+  nombre: string;
+}
+
 export interface EstudioLaboratorio {
   codigo: number;
   fecha: string;

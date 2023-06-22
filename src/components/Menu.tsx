@@ -10,7 +10,7 @@ import {
   IonNote,
 } from "@ionic/react";
 
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import {
   archiveOutline,
   archiveSharp,
@@ -61,28 +61,66 @@ const appPages: AppPage[] = [
     mdIcon: today,
   },
   {
-    title: "Registrar Paciente",
-    url: "/portal/Registrar Paciente",
+    title: "Registrar Nuevo Paciente",
+    url: "/portal/Registrar Nuevo Paciente",
     iosIcon: personAddOutline,
     mdIcon: personAdd,
   },
   {
-    title: "Buscar Paciente",
+    title: "Paciente",
+    url: "/portal/Paciente",
+    iosIcon: searchOutline,
+    mdIcon: search,
+  },
+  {
+    title: "Nuevo Turno",
+    url: "/portal/Nuevo Turno",
+    iosIcon: medkitOutline,
+    mdIcon: medkit,
+  },
+];
+
+const labels = [
+  {
+    title: "Agenda",
+    url: "/portal/Agenda",
+    iosIcon: todayOutline,
+    mdIcon: today,
+  },
+  {
+    title: "Limpiar ficha",
     url: "/portal/Buscar",
     iosIcon: searchOutline,
     mdIcon: search,
   },
   {
     title: "Dar Turno",
-    url: "/portal/DarTurno",
+    url: "/portal/Paciente/:codPaciente/Dar Turno",
     iosIcon: medkitOutline,
     mdIcon: medkit,
   },
+  {
+    title: "Historial de Turnos",
+    url: "/portal/Paciente/:codPaciente/TurnosPaciente",
+    iosIcon: personAddOutline,
+    mdIcon: personAdd,
+  },
+  {
+    title: "Pdf's Paciente",
+    url: "/portal/Paciente/:codPaciente/PdfPaciente",
+    iosIcon: personAddOutline,
+    mdIcon: personAdd,
+  },
+  {
+    title: "Nuevo Pedido",
+    url: "/portal/Paciente/:codPaciente/PedidoPaciente",
+    iosIcon: personAddOutline,
+    mdIcon: personAdd,
+  },
 ];
 
-const labels = ["Family", "Friends", "Notes", "Work", "Travel", "Reminders"];
-
 const Menu: React.FC<ContainerProps> = ({ usuarioLogueado, setUsuarioLogueado }) => {
+  const { name } = useParams<{ name: string }>();
   const [usuario, setUsuario] = useState<Usuario>({
     usuario: "",
     password: "",
@@ -101,7 +139,6 @@ const Menu: React.FC<ContainerProps> = ({ usuarioLogueado, setUsuarioLogueado })
   const { recuperarSesion } = useUsuario();
 
   useEffect(() => {
-    console.log(history.location);
     if (usuarioLogueado) {
       setUsuario(usuarioLogueado);
     } else {
@@ -128,13 +165,35 @@ const Menu: React.FC<ContainerProps> = ({ usuarioLogueado, setUsuarioLogueado })
     });
     history.push("/");
   };
-
+  // pdf gpalau patricia aRJONA
   return (
     <IonMenu contentId="main" type="push">
       <IonContent>
         <IonList id="inbox-list">
           <IonListHeader>{usuario?.nombreCompleto}</IonListHeader>
           <IonNote>{usuario?.especialidadNom}</IonNote>
+          {/* //@ts-ignore */}
+          {/* { name === "Paciente" ? labels.map((appPage, index) => {
+            return (
+              <IonMenuToggle key={index} autoHide={false}>
+                <IonItem
+                  className={location.pathname === appPage.url ? "selected" : ""}
+                  routerLink={appPage.url}
+                  routerDirection="none"
+                  lines="none"
+                  detail={false}
+                >
+                  <IonIcon
+                    aria-hidden="true"
+                    slot="start"
+                    ios={appPage.iosIcon}
+                    md={appPage.mdIcon}
+                  />
+                  <IonLabel>{appPage.title}</IonLabel>
+                </IonItem>
+              </IonMenuToggle>
+            );
+          }):*/}
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>

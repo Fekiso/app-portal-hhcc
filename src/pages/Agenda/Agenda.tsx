@@ -1,8 +1,10 @@
 import {
   IonButton,
   IonCard,
+  IonCardContent,
   IonChip,
   IonCol,
+  IonContent,
   IonGrid,
   IonIcon,
   IonInput,
@@ -35,7 +37,7 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
     prestadorCod: 0,
     prestadorNom: "",
   });
-  const [fechaSeleccionada, setFechaSeleccionada] = useState<string>(dayjs().toString());
+  const [fechaSeleccionada, setFechaSeleccionada] = useState<string>(dayjs().format("YYYY-MM-DD"));
   const [turnos, setTurnos] = useState<Turno[]>([]);
   const { mostrar, mensaje, color, mostrarNotificacion } = useNotificacion();
   const { recuperarSesion } = useUsuario();
@@ -114,7 +116,7 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
 
   const handleClickModificarFecha = (signo: string) => {
     // @ts-ignore
-    let fecha = new dayjs();
+    let fecha = new dayjs(fechaSeleccionada);
     if (signo === "+") {
       fecha = dayjs(fecha).add(1, "days").format("YYYY-MM-DD");
     }
@@ -143,11 +145,15 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
     traerTurnosAgenda(prestadorSelect, fechaSeleccionada);
   };
 
+  const handleClickMostrarFichaPacienteTurnoSeleccionado = (turno: Turno) => {
+    history.push("/portal/Paciente", { turno: turno });
+  };
+
   const renderAgenda = () => {
     const mostrarAgenda = turnos.map((turno) => {
       return (
-        <IonItem className="fila ion-text-start" disabled={turno.paciente === 0}>
-          <IonCol className="celda">
+        <IonItem button onClick={() => handleClickMostrarFichaPacienteTurnoSeleccionado(turno)}>
+          <IonCol>
             <StyledButton
               disabled
               className={
@@ -163,33 +169,35 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
                   : "verde text"
               }
             >
-              {turno.asistio === 0
-                ? turno.paciente !== 0
-                  ? "No asistio"
-                  : "No asignado"
-                : turno.atendido
-                ? "Atendido"
-                : dayjs(turno.atendidoHora).format("HH:mm") ===
-                  dayjs("0001-01-01T00:00:00").format("HH:mm")
-                ? "Asistio"
-                : "Siendo atendido"}
+              <small>
+                {turno.asistio === 0
+                  ? turno.paciente !== 0
+                    ? "No asistio"
+                    : "No asignado"
+                  : turno.atendido
+                  ? "Atendido"
+                  : dayjs(turno.atendidoHora).format("HH:mm") ===
+                    dayjs("0001-01-01T00:00:00").format("HH:mm")
+                  ? "Asistio"
+                  : "Siendo atendido"}
+              </small>
             </StyledButton>
           </IonCol>
-          <IonCol className="celda">
-            <p>{dayjs(turno.hora).format("HH:mm")}</p>
+          <IonCol>
+            <small>{dayjs(turno.hora).format("HH:mm")}</small>
           </IonCol>
-          <IonCol className="celda">
-            <p>{turno.pacienteNom ?? ""}</p>
+          <IonCol>
+            <small>{turno.pacienteNom ?? ""}</small>
           </IonCol>
-          <IonCol className="celda">
-            <p>
+          <IonCol>
+            <small>
               {(turno.mutual === 0 ? "" : turno.mutual) +
                 " - " +
                 (turno.mutualNom === null ? "" : turno.mutualNom)}
-            </p>
+            </small>
           </IonCol>
-          <IonCol className="celda">
-            <p>{turno.observaciones ?? ""}</p>
+          <IonCol>
+            <small>{turno.observaciones ?? ""}</small>
           </IonCol>
         </IonItem>
       );
@@ -202,7 +210,7 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
       <IonCard>
         <IonRow>
           <IonCol sizeXs="12" sizeMd="6">
-            <IonItem lines="none">
+            <IonItem>
               <IonInput
                 readonly
                 label="Prestador"
@@ -221,7 +229,7 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
             </IonItem>
           </IonCol>
           <IonCol sizeXs="12" sizeMd="6">
-            <IonItem lines="none">
+            <IonItem>
               <IonIcon
                 icon={chevronBackOutline}
                 onClick={() => handleClickModificarFecha("-")}
@@ -231,7 +239,7 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
                 labelPlacement="stacked"
                 label="Fecha:"
                 type="date"
-                // value={new Date()}
+                value={dayjs(fechaSeleccionada).format("YYYY-MM-DD")}
                 // onIonChange={(e) => setFechaNac(e.target.value)}
                 // @ts-ignore
                 min={dayjs(new dayjs()).subtract(110, "year").format("YYYY-MM-DD")}
@@ -250,28 +258,24 @@ const Agenda: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
       </IonCard>
       {turnos.length > 0 && (
         <IonCard>
-          <IonList lines="none">
-            <IonGrid>
-              <IonItem className="fila cabecera">
-                <IonCol className="celda cabecera">
-                  <p>Estado</p>
-                </IonCol>
-                <IonCol className="celda cabecera">
-                  <p>Hora</p>
-                </IonCol>
-                <IonCol className="celda cabecera">
-                  <p>Paciente</p>
-                </IonCol>
-                <IonCol className="celda cabecera">
-                  <p>Mutual</p>
-                </IonCol>
-                <IonCol className="celda cabecera">
-                  <p>Observacion</p>
-                </IonCol>
-              </IonItem>
-              <>{renderAgenda()}</>
-            </IonGrid>
-          </IonList>
+          <IonItem className="fila cabecera">
+            <IonCol className="celda cabecera">
+              <small>Estado</small>
+            </IonCol>
+            <IonCol className="celda cabecera">
+              <small>Hora</small>
+            </IonCol>
+            <IonCol className="celda cabecera">
+              <small>Paciente</small>
+            </IonCol>
+            <IonCol className="celda cabecera">
+              <small>Mutual</small>
+            </IonCol>
+            <IonCol className="celda cabecera">
+              <small>Observacion</small>
+            </IonCol>
+          </IonItem>
+          <>{renderAgenda()}</>
         </IonCard>
       )}
       <CustomToast mostrar={mostrar} mensaje={mensaje} color={color} />

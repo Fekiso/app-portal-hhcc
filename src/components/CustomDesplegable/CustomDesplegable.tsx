@@ -106,7 +106,7 @@ const CustomDesplegable: React.FC<ContainerProps> = ({
               >
                 <IonLabel>
                   <h2>{item.text}</h2>
-                  {item.nota && <p>{item.nota}</p>}
+                  {item.nota && <small>{item.nota}</small>}
                 </IonLabel>
                 <IonIcon
                   slot="start"

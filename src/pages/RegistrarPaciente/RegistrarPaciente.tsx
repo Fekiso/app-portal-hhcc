@@ -145,10 +145,6 @@ const RegistrarPaciente: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
     } else history.push("/ErrorPage");
   }, []);
 
-  useEffect(() => {
-    console.log(mostrar);
-  }, [mostrar]);
-
   const handleChangeInput = (value: any, id: string) => {
     let pacienteModificado = { ...paciente };
 
@@ -546,6 +542,73 @@ const RegistrarPaciente: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
             </IonRow>
           </IonList>
           <IonList>
+            <IonNote>Datos de contacto</IonNote>
+            <IonRow>
+              <IonCol size="12" size-md="6">
+                <IonItem>
+                  <IonInput
+                    label="Telefono"
+                    label-placement="floating"
+                    id="telefono"
+                    value={paciente.telefono}
+                    // @ts-ignore
+                    onKeyUp={(e) => handleChangeInput(e.target.value, "telefono")}
+                    className={`${erroresPaciente.telefono && "ion-invalid"}`}
+                  />
+                  {erroresPaciente.telefono && (
+                    <>
+                      <IonIcon
+                        aria-hidden="true"
+                        slot="end"
+                        ios={alertOutline}
+                        md={alert}
+                        id="btnErrorTelefono"
+                        size="small"
+                        color="danger"
+                      />
+                      <IonPopover trigger="btnErrorTelefono" triggerAction="click">
+                        <IonContent class="ion-padding">
+                          No se ingreso un telefono de contacto
+                        </IonContent>
+                      </IonPopover>
+                    </>
+                  )}
+                </IonItem>
+              </IonCol>
+              <IonCol size="12" size-md="6">
+                <IonItem>
+                  <IonInput
+                    label="Correo electronico"
+                    label-placement="floating"
+                    id="email"
+                    value={paciente.email}
+                    // @ts-ignore
+                    onKeyUp={(e) => handleChangeInput(e.target.value, "email")}
+                    className={`${erroresPaciente.email && "ion-invalid"}`}
+                  />
+                  {erroresPaciente.email && (
+                    <>
+                      <IonIcon
+                        aria-hidden="true"
+                        slot="end"
+                        ios={alertOutline}
+                        md={alert}
+                        id="btnErrorCorreo"
+                        size="small"
+                        color="danger"
+                      />
+                      <IonPopover trigger="btnErrorCorreo" triggerAction="click">
+                        <IonContent class="ion-padding">
+                          No se ingreso un correo electronico valido
+                        </IonContent>
+                      </IonPopover>
+                    </>
+                  )}
+                </IonItem>
+              </IonCol>
+            </IonRow>
+          </IonList>
+          <IonList>
             <IonNote>Datos de mutual</IonNote>
             <IonRow>
               <IonCol size="12" size-md="6">
@@ -610,73 +673,6 @@ const RegistrarPaciente: React.FC<ContainerProps> = ({ usuarioLogueado }) => {
                       <IonPopover trigger="btnErrorMutualAfiliado" triggerAction="click">
                         <IonContent class="ion-padding">
                           No se ingreso un numero de afiliado, en caso de no tener
-                        </IonContent>
-                      </IonPopover>
-                    </>
-                  )}
-                </IonItem>
-              </IonCol>
-            </IonRow>
-          </IonList>
-          <IonList>
-            <IonNote>Datos de contacto</IonNote>
-            <IonRow>
-              <IonCol size="12" size-md="6">
-                <IonItem>
-                  <IonInput
-                    label="Telefono"
-                    label-placement="floating"
-                    id="telefono"
-                    value={paciente.telefono}
-                    // @ts-ignore
-                    onKeyUp={(e) => handleChangeInput(e.target.value, "telefono")}
-                    className={`${erroresPaciente.telefono && "ion-invalid"}`}
-                  />
-                  {erroresPaciente.telefono && (
-                    <>
-                      <IonIcon
-                        aria-hidden="true"
-                        slot="end"
-                        ios={alertOutline}
-                        md={alert}
-                        id="btnErrorTelefono"
-                        size="small"
-                        color="danger"
-                      />
-                      <IonPopover trigger="btnErrorTelefono" triggerAction="click">
-                        <IonContent class="ion-padding">
-                          No se ingreso un telefono de contacto
-                        </IonContent>
-                      </IonPopover>
-                    </>
-                  )}
-                </IonItem>
-              </IonCol>
-              <IonCol size="12" size-md="6">
-                <IonItem>
-                  <IonInput
-                    label="Correo electronico"
-                    label-placement="floating"
-                    id="email"
-                    value={paciente.email}
-                    // @ts-ignore
-                    onKeyUp={(e) => handleChangeInput(e.target.value, "email")}
-                    className={`${erroresPaciente.email && "ion-invalid"}`}
-                  />
-                  {erroresPaciente.email && (
-                    <>
-                      <IonIcon
-                        aria-hidden="true"
-                        slot="end"
-                        ios={alertOutline}
-                        md={alert}
-                        id="btnErrorCorreo"
-                        size="small"
-                        color="danger"
-                      />
-                      <IonPopover trigger="btnErrorCorreo" triggerAction="click">
-                        <IonContent class="ion-padding">
-                          No se ingreso un correo electronico valido
                         </IonContent>
                       </IonPopover>
                     </>

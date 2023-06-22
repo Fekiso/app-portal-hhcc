@@ -116,104 +116,75 @@ const FichaPaciente: React.FC<ContainerProps> = ({
         onClick={(e) => handleClickSeleccionarPaciente(paciente)}
       >
         <IonCol className="celda" size="3">
-          <p>{paciente.hc}</p>
+          <small>{paciente.hc}</small>
         </IonCol>
         <IonCol className="celda" size="3">
-          <p>
+          <small>
             {paciente.apellido}, {paciente.nombre}
-          </p>
+          </small>
         </IonCol>
         <IonCol className="celda" size="3">
-          <p>{paciente.mutualNombre}</p>
+          <small>{paciente.mutualNombre}</small>
         </IonCol>
         <IonCol className="celda" size="3">
-          <p>{paciente.mutualAfiliado === null ? "-" : paciente.mutualAfiliado}</p>
+          <small>{paciente.mutualAfiliado === null ? "-" : paciente.mutualAfiliado}</small>
         </IonCol>
       </IonItem>
     ));
   };
 
   return (
-    <>
-      {/* {paciente.codigo !== 0 ? (*/}
-      <>
-        <IonCard>
-          <IonGrid>
-            <IonCardContent>
-              <IonRow className="ion-text-start">
-                <IonCol className="ion-text-start">
-                  <h2>
-                    Paciente: {paciente.apellido}, {paciente.nombre}
-                  </h2>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol className="ion-text-start">
-                  <IonLabel>Documento: {paciente.documentoNro}</IonLabel>
-                </IonCol>
-                <IonCol className="ion-text-start">
-                  <IonLabel>Edad: {dayjs().diff(paciente.nacimiento, "year")}</IonLabel>
-                </IonCol>
-                <IonCol className="ion-text-start">
-                  <IonLabel>Fecha Nacimiento: {paciente.nacimiento}</IonLabel>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol className="ion-text-start">
-                  <IonLabel>Mutual: {paciente.mutualNombre}</IonLabel>
-                </IonCol>
-                <IonCol className="ion-text-start">
-                  <IonLabel>
-                    Nro Afiliado: {paciente.mutualAfiliado === null ? "-" : paciente.mutualAfiliado}
-                  </IonLabel>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol className="ion-text-start">
-                  <IonLabel>Celular:{paciente.celular}</IonLabel>
-                </IonCol>
-                <IonCol className="ion-text-start">
-                  <IonLabel>Telefono: {paciente.telefono}</IonLabel>
-                </IonCol>
-                <IonCol className="ion-text-start">
-                  <IonLabel>Correo: {paciente.email}</IonLabel>
-                </IonCol>
-              </IonRow>
-              <br />
-              <IonRow className="ion-align-items-center">
-                <IonCol sizeXs="6" sizeMd="3">
-                  <StyledButton expand="block">Dar Turno</StyledButton>
-                </IonCol>
-                <IonCol sizeXs="6" sizeMd="3">
-                  <StyledButton expand="block">Historial de turnos</StyledButton>
-                </IonCol>
-                <IonCol sizeXs="6" sizeMd="3">
-                  <StyledButton expand="block">Pdfs Paciente</StyledButton>
-                </IonCol>
-                <IonCol sizeXs="6" sizeMd="3">
-                  <StyledButton expand="block">Nuevo Pedido</StyledButton>
-                </IonCol>
-              </IonRow>
-            </IonCardContent>
-          </IonGrid>
-        </IonCard>
-        <IonCard>
-          <IonGrid>
-            <IonCardContent>
-              <TabsEstudios />
-            </IonCardContent>
-          </IonGrid>
-        </IonCard>
-      </>
-      {/*  ) : (
-      <IonCard>
-        <IonGrid>
+    <IonCard>
+      <IonGrid>
+        {paciente.codigo !== 0 ? (
+          <IonCardContent>
+            <IonRow className="ion-text-start">
+              <IonCol className="ion-text-start">
+                <h2>
+                  Paciente: {paciente.apellido}, {paciente.nombre}
+                </h2>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol className="ion-text-start">
+                <IonLabel>Documento: {paciente.documentoNro}</IonLabel>
+              </IonCol>
+              <IonCol className="ion-text-start">
+                <IonLabel>Edad: {dayjs().diff(paciente.nacimiento, "year")}</IonLabel>
+              </IonCol>
+              <IonCol className="ion-text-start">
+                <IonLabel>Fecha Nacimiento: {paciente.nacimiento}</IonLabel>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol className="ion-text-start">
+                <IonLabel>Mutual: {paciente.mutualNombre}</IonLabel>
+              </IonCol>
+              <IonCol className="ion-text-start">
+                <IonLabel>
+                  Nro Afiliado: {paciente.mutualAfiliado === null ? "-" : paciente.mutualAfiliado}
+                </IonLabel>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol className="ion-text-start">
+                <IonLabel>Celular:{paciente.celular}</IonLabel>
+              </IonCol>
+              <IonCol className="ion-text-start">
+                <IonLabel>Telefono: {paciente.telefono}</IonLabel>
+              </IonCol>
+              <IonCol className="ion-text-start">
+                <IonLabel>Correo: {paciente.email}</IonLabel>
+              </IonCol>
+            </IonRow>
+          </IonCardContent>
+        ) : (
           <IonCardContent className="ion-padding">
             <IonGrid>
               <IonRow className="ion-align-items-center">
                 <IonCol sizeXs="12" sizeMd="3">
                   <IonSelect
-                    label="Buscar por"
+                    label="Buscar paciente segun "
                     labelPlacement="floating"
                     interface="popover"
                     value={buscarPor}
@@ -261,10 +232,9 @@ const FichaPaciente: React.FC<ContainerProps> = ({
               )}
             </IonGrid>
           </IonCardContent>
-        </IonGrid>
-      </IonCard>
-        )} */}
-    </>
+        )}
+      </IonGrid>
+    </IonCard>
   );
 };
 

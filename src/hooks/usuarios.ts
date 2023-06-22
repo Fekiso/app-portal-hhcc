@@ -33,10 +33,6 @@ const useUsuario = (): UseUsuario => {
     );
   };
 
-  useEffect(() => {
-    console.log("Entro al hook de usuario", recuperarSesion());
-  }, []);
-
   return { recuperarSesion, guardarSesionUsuario };
 };
 

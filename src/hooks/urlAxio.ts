@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 type UseUrlAxio = {
-  getUrlAxio: () => void;
+  getUrlAxio: () => string;
 };
 
 const useUrlAxio = (): UseUrlAxio => {

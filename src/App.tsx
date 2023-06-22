@@ -22,24 +22,19 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import "./theme/general.css";
 import LoginIonic from "./pages/Login/Login";
-import { createHashHistory } from "history";
 import { useState } from "react";
-import { Paciente, Usuario } from "./interfaces";
-import { Notificacion } from "./interfaces";
-import CustomToast from "./components/CustomToast/CustomToast";
-import BuscadorPacientes from "./components/BuscadorPacientes/BuscadorPacientes";
+import { Usuario } from "./interfaces";
 import PageError from "./pages/PageError/PageError";
-import FichaPaciente from "./components/FichaPaciente/FichaPaciente";
 
 setupIonicReact();
 
 const App: React.FC = () => {
   const [usuario, setUsuario] = useState<Usuario>();
-  const [paciente, setPaciente] = useState<Paciente>();
   return (
     <IonApp>
-      {/* <IonReactRouter>
+      <IonReactRouter>
         <Switch>
           <Route path="/" exact={true}>
             <Redirect to="/Login" />
@@ -62,8 +57,7 @@ const App: React.FC = () => {
             <PageError />
           </Route>
         </Switch>
-      </IonReactRouter> */}
-      <FichaPaciente setPacienteProp={setPaciente} />
+      </IonReactRouter>
     </IonApp>
   );
 };

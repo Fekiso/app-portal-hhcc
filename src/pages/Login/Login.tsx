@@ -170,7 +170,8 @@ const LoginIonic: React.FC<ContainerProps> = ({ setUsuarioLogueado }) => {
             <IonCardHeader>
               <IonRow className="justify-content-center">
                 <IonCardTitle>
-                  <h1>Inicio de sesion</h1>
+                  <h3>Historias Clínicas de Pacientes</h3>
+                  <p>Inicio de sesion</p>
                 </IonCardTitle>
               </IonRow>
             </IonCardHeader>

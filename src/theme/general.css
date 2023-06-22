@@ -1,0 +1,96 @@
+:root {
+  --whiteText: #fff;
+  --primaryFont: "Montserrat", sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.fullSize {
+  width: 100vw;
+  height: 100vh;
+}
+
+.justify-content-center {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+.LoginViewRow {
+  height: 100vh;
+  min-height: 700px;
+  width: 100%;
+}
+
+.tabla {
+  border-radius: 5px;
+  margin: 15px;
+}
+
+.tabla ion-row.fila {
+  text-align: center;
+  border-bottom: solid 2px #bfbfbf;
+}
+
+.tabla .celda {
+  font-weight: normal;
+}
+
+.tabla .celda.cabecera,
+.tabla .celda.cabecera p {
+  font-weight: bold;
+}
+
+.tabla .celda.cabecera p {
+  color: #dc852d;
+}
+
+.tabla .fila.cabecera {
+  font-weight: bold;
+}
+
+ion-col {
+  text-align: center;
+}
+
+.passwordInput input[type="number"] {
+  -moz-appearance: textfield;
+}
+.tabla .fila:last-child,
+.tabla .fila:last-child {
+  border-bottom: none;
+}
+
+.passwordInput input::-webkit-outer-spin-button,
+.passwordInput input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+ion-item.amarillo-sol ion-icon {
+  color: #dc852d;
+}
+
+ion-datetime .light {
+  color: #767676;
+}
+
+ion-avatar {
+  --border-radius: 4px;
+  margin: 5px;
+}
+
+ion-toolbar {
+  --opacity: 0.5;
+}
+
+ion-split-pane {
+  --side-width: 300px;
+  --side-max-width: 300px;
+}
+
+ion-menu ion-content {
+  --background: var(--ion-item-background, var(--ion-background-color, #fff));
+}
